@@ -33,4 +33,5 @@ abstract class BaseListAdapter<T>(diffItemCallback: DiffUtil.ItemCallback<T>,val
             }
         }
     }
+
 }

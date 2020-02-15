@@ -6,11 +6,14 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.fury.noteapp.R
 import com.fury.noteapp.adapter.NoteAdapter
 import com.fury.noteapp.base.BaseActivity
 import com.fury.noteapp.base.ViewModelFactory
 import com.fury.noteapp.databinding.ActivityHomeBinding
+import com.fury.noteapp.utility.toast
 import com.fury.noteapp.viewmodel.NoteViewModel
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -34,10 +37,22 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),KodeinAware {
         mNoteViewModel.getAllNotes().observe(this, Observer {
             mNoteAdapter.submitList(it)
         })
-    }
 
+        RecyclerViewItemTouchHelper().attachToRecyclerView(binding.noteRecycler)
+    }
 
     fun onAddNoteClick(view : View){
         startActivity(Intent(this,AddNoteActivity::class.java))
     }
+
+    inner class RecyclerViewItemTouchHelper : ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
+        ): Boolean {return false}
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            mNoteViewModel.deleteNote(mNoteAdapter.getNote(viewHolder.adapterPosition))
+            toast("Note Deleted")
+        }
+
+    })
 }
