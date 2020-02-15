@@ -38,7 +38,7 @@ class AddNoteActivity : BaseActivity<ActivityAddNoteBinding>(),KodeinAware {
 
     fun onSaveNoteClick(view : View){
         val title =mBinding.titleEt.text.toString().trim()
-        var desc = mBinding.titleEt.text.toString().trim()
+        var desc = mBinding.noteDescEt.text.toString().trim()
 
         when {
             title.isNullOrEmpty() -> {
